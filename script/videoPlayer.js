@@ -5,7 +5,9 @@ export const videoPlayerInit = () => {
   videoButtonStop = document.querySelector('.video-button__stop'),
   videoTimePassed = document.querySelector('.video-time__passed'),
   videoProgress = document.querySelector('.video-progress'),
-  videoTimeTotal = document.querySelector('.video-time__total');
+  videoTimeTotal = document.querySelector('.video-time__total'),
+  videoVolume = document.querySelector('.video-volume'),
+  videoFullsceen = document.querySelector('.video-fullscreen')
 
   const toggleIcon = () => {
     if(videoPlayer.paused) {
@@ -32,6 +34,11 @@ export const videoPlayerInit = () => {
 
   const addZero = n => n < 10 ? '0' + n : n;
 
+  const changeVolume = () => {
+    const volumeValue = videoVolume.value;
+    videoPlayer.volume = volumeValue / 100;
+  }
+
   videoPlayer.addEventListener('click', togglePlay);
   videoButtonPlay.addEventListener('click', togglePlay);
 
@@ -56,15 +63,26 @@ export const videoPlayerInit = () => {
 
   });
 
-  videoProgress.addEventListener('change', () => {
+  videoProgress.addEventListener('input', () => { // or 'change'
       const duration = videoPlayer.duration;
       const value = videoProgress.value;
 
       videoPlayer.currentTime = (value * duration) / 100;   
+  });
+
+  videoVolume.addEventListener('input', changeVolume);
+
+  videoFullsceen.addEventListener('click', () => {
+    videoPlayer.requestFullscreen();
+  });
+
+  videoPlayer.addEventListener('volumechange', () => {
+    videoVolume.value = Math.round(videoPlayer.volume * 100); // чтобы при изменения звука при фуллскрине изначальный ползунок звука (маленькького экрана тоже менялся)
   })
-
-
-
+  
+  changeVolume(); // как сработает эта функция в значение volume будет передано значение input-range из верстки изначально звук 100 процентов 
+  
+// ДЗ сделать иконку mute volume и еще при нажатии на иконку звука слева убирать звук а справа увеличевать на максимум
 
 
 
