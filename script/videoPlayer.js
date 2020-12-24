@@ -1,3 +1,5 @@
+import { addZero } from './subscript.js';
+
 export const videoPlayerInit = () => {
 
   const videoPlayer = document.querySelector('.video-player'),
@@ -32,8 +34,6 @@ export const videoPlayerInit = () => {
     videoPlayer.currentTime = 0;
   }
 
-  const addZero = n => n < 10 ? '0' + n : n;
-
   const changeVolume = () => {
     const volumeValue = videoVolume.value;
     videoPlayer.volume = volumeValue / 100;
@@ -44,6 +44,14 @@ export const videoPlayerInit = () => {
 
   videoPlayer.addEventListener('play', toggleIcon);
   videoPlayer.addEventListener('pause', toggleIcon);
+
+  videoPlayer.addEventListener('fullscreenchange', () => { // for nozilla firefox
+    if (document.fullscreen) {
+      videoPlayer.controls = true;
+    } else {
+      videoPlayer.controls = false;
+    }
+  });
 
   videoButtonStop.addEventListener('click', stopPlay);
   videoPlayer.addEventListener('timeupdate', () => {
@@ -83,12 +91,6 @@ export const videoPlayerInit = () => {
   changeVolume(); // как сработает эта функция в значение volume будет передано значение input-range из верстки изначально звук 100 процентов 
   
 // ДЗ сделать иконку mute volume и еще при нажатии на иконку звука слева убирать звук а справа увеличевать на максимум
-
-
-
-
-
-
 
 
 }
